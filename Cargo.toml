@@ -44,16 +44,15 @@ clap = { version = "*", default-features = true, features = ["derive"] }
 #lazy_static = "*"
 once_cell = "*"
 #hashbrown = { version = "*", default-features = true, features = ["inline-more", "ahash"] }
-
 #statrs = { version = "*", default-features = false }
 
 serde = { version = "*", default-features = false, features = ["derive"] }
-serde_json = "*"
+serde_json = { version = "*", default-features = false }
 
-serde-json-core = "*"
+serde-json-core = { version = "*", default-features = false, features = ["heapless"]}
 
-nanoserde = "*"
+nanoserde = { version = "*", default-features = false }
 
-simd-json = "*"
+simd-json = { version = "*", default-features = false }
 
-simd-json-derive = "*"
+simd-json-derive = { version = "*", default-features = false}
