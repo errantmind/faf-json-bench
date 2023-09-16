@@ -25,10 +25,13 @@ After that, just run it as usual with the optional flag to control duration per 
 
 ## Methodology
 
-- Compiled with flags specified in `./cargo/config`, which include `"-Ctarget-cpu=native"`.
-- I always take precautions to ensure my benchmarking isn't adversely affected by other running programs by not having anything open/running, including most background services. There is very little noise.
-- To ensure results aren't optimized away, I always check the output after serializing / deserializing for correctness.
-- To ensure, loops aren't unpredictably vectorized, I check the time on each iteration instead of doing a fixed number of iterations. My time check uses VDSO on Linux which is very fast. I thought Rust's standard library also used VDSO on Linux but when I switched to my own implementation times improved by over 10%.
+- LLVM / Clang
+- MiMalloc Allocator
+- Elevated priority
+- Minimized system-wide noise. I always take precautions to ensure my benchmarking isn't adversely affected by other running programs by not having anything open/running, including most background services
+- Compiled with flags specified in `./cargo/config`, which include `"-Ctarget-cpu=native"`- 
+- To ensure results aren't optimized away, I always check the output after serializing / deserializing for correctness
+- To ensure, loops aren't unpredictably vectorized, I check the time on each iteration instead of doing a fixed number of iterations. My time check uses VDSO on Linux which is very fast. I thought Rust's standard library also used VDSO on Linux but when I switched to my own implementation times improved by over 10%
 
 System info for context
 
