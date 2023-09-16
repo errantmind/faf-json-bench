@@ -1,0 +1,20 @@
+[build]
+rustflags = [
+   "-Ctarget-cpu=native",
+   "-Ztune-cpu=native",
+   "-Zmutable-noalias=yes",
+   "-Clinker=/usr/bin/clang-15",
+   "-Clink-arg=-fuse-ld=/usr/bin/ld.lld",
+   "-Clink-arg=-flto=thin",
+   #"-Clto=thin",
+   "-Copt-level=3",
+   "-Ccodegen-units=1",
+   "-Cpanic=abort",
+   "-Cembed-bitcode=yes",
+   "-Cforce-frame-pointers=n",
+   "-Cdebug-assertions=no",
+   "-Coverflow-checks=no",
+   "-Ccontrol-flow-guard=no",
+   "-Clink-dead-code=no",
+   "-Zno-parallel-llvm"
+]
