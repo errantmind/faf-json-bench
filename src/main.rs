@@ -16,6 +16,9 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#![allow(unused_imports)]
+#![allow(dead_code)]
+
 mod args;
 mod statics;
 
@@ -31,6 +34,11 @@ use nanoserde::SerJson;
 
 #[derive(nanoserde::SerJson)]
 pub struct MessageNanoserde {
+   pub message: &'static str,
+}
+
+#[derive(simd_json_derive::Serialize)]
+pub struct MessageSimdJsonDerive {
    pub message: &'static str,
 }
 
@@ -75,7 +83,7 @@ fn main() {
 
    {
       // serde_json to_vec
-      let mut serde_json_bytes = 0u64;
+      let mut byte_count = 0u64;
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
@@ -87,18 +95,17 @@ fn main() {
          let out = serde_json::to_vec(&message).unwrap();
          assert_eq!(out.as_slice(), HELLO_WORLD_JSON_BYTES);
          let bytes_len = out.len();
-         serde_json_bytes += bytes_len as u64;
+         byte_count += bytes_len as u64;
       }
 
-      print_output("serde_json to_vec", serde_json_bytes)
+      print_output("serde_json to_vec", byte_count)
    }
 
    {
       // serde_json to_writer
 
-      use bytes::BufMut;
-      let mut writer = Vec::with_capacity(26).writer();
-      let mut serde_json_bytes = 0u64;
+      let mut writer = Vec::with_capacity(26);
+      let mut byte_count = 0u64;
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
@@ -108,19 +115,19 @@ fn main() {
 
          let message = MessageSerdeJson { message: "Hello World!" };
          serde_json::to_writer(&mut writer, &message).unwrap();
-         let writer_slice = writer.get_ref().as_slice();
+         let writer_slice = writer.as_slice();
          assert_eq!(writer_slice, HELLO_WORLD_JSON_BYTES);
-         serde_json_bytes += writer_slice.len() as u64;
-         writer.get_mut().clear();
+         byte_count += writer_slice.len() as u64;
+         writer.clear();
       }
 
-      print_output("serde_json to_writer", serde_json_bytes)
+      print_output("serde_json to_writer", byte_count)
    }
 
    {
       // serde_json_core to_vec
 
-      let mut serde_json_bytes = 0u64;
+      let mut byte_count = 0u64;
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
@@ -131,19 +138,19 @@ fn main() {
          let message = MessageSerdeJson { message: "Hello World!" };
          let out = serde_json_core::to_vec::<MessageSerdeJson, 26>(&message).unwrap();
          assert_eq!(out.as_slice(), HELLO_WORLD_JSON_BYTES);
-         serde_json_bytes += out.len() as u64;
+         byte_count += out.len() as u64;
       }
 
-      print_output("serde_json_core to_vec", serde_json_bytes)
+      print_output("serde_json_core to_vec", byte_count)
    }
 
    {
       // serde_json_core to_slice
 
-      let mut buf: [u8; 26] = unsafe { core::mem::MaybeUninit::zeroed().assume_init() };
+      let mut buf: [u8; 26] = [0; 26];
       let buf_slice = buf.as_mut_slice();
 
-      let mut serde_json_bytes = 0u64;
+      let mut byte_count = 0u64;
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
@@ -154,19 +161,19 @@ fn main() {
          let message = MessageSerdeJson { message: "Hello World!" };
          let bytes_len = serde_json_core::to_slice::<MessageSerdeJson>(&message, buf_slice).unwrap();
          assert_eq!(buf_slice, HELLO_WORLD_JSON_BYTES);
-         serde_json_bytes += bytes_len as u64;
-         // CANNOT writer.clear(); when using a vec instead of a byte array, 
+         byte_count += bytes_len as u64;
+         // CANNOT writer.clear(); when using a vec instead of a byte array,
          //   the slice passed must be 'full' with values.
          // Seems like a bug but it works.
       }
 
-      print_output("serde_json_core to_slice", serde_json_bytes)
+      print_output("serde_json_core to_slice", byte_count)
    }
 
    {
       // nanoserde serialize_json
 
-      let mut serde_json_bytes = 0u64;
+      let mut byte_count = 0u64;
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
@@ -178,17 +185,17 @@ fn main() {
          let out = nanoserde::SerJson::serialize_json(&message);
          assert_eq!(out, HELLO_WORLD_JSON_STR);
          let bytes_len = out.len();
-         serde_json_bytes += bytes_len as u64;
+         byte_count += bytes_len as u64;
       }
 
-      print_output("nanoserde serialize_json", serde_json_bytes)
+      print_output("nanoserde serialize_json", byte_count)
    }
 
    {
       // nanoserde ser_json
 
       let mut state = nanoserde::SerJsonState { out: String::with_capacity(26) };
-      let mut serde_json_bytes = 0u64;
+      let mut byte_count = 0u64;
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
@@ -200,11 +207,99 @@ fn main() {
          message.ser_json(26, &mut state);
          let bytes_len = state.out.len();
          assert_eq!(state.out, HELLO_WORLD_JSON_STR);
-         serde_json_bytes += bytes_len as u64;
+         byte_count += bytes_len as u64;
          state.out.clear();
       }
 
-      print_output("nanoserde ser_json", serde_json_bytes)
+      print_output("nanoserde ser_json", byte_count)
+   }
+
+   {
+      // simd_json serde::to_vec
+      
+      let mut byte_count = 0u64;
+      let start_time_nanos = get_epoch_nanos(&mut ts);
+
+      loop {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+            break;
+         }
+
+         let message = MessageSerdeJson { message: "Hello World!" };
+         let out = simd_json::serde::to_vec(&message).unwrap();
+         assert_eq!(out, HELLO_WORLD_JSON_BYTES);
+         let bytes_len = out.len();
+         byte_count += bytes_len as u64;
+      }
+
+      print_output("simd_json serde::to_vec", byte_count)
+   }
+
+   {
+      // simd_json to_writer
+
+      let mut writer = Vec::with_capacity(26);
+      let mut byte_count = 0u64;
+      let start_time_nanos = get_epoch_nanos(&mut ts);
+
+      loop {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+            break;
+         }
+
+         let message = MessageSerdeJson { message: "Hello World!" };
+         simd_json::serde::to_writer(&mut writer, &message).unwrap();
+         let writer_slice = writer.as_slice();
+         assert_eq!(writer_slice, HELLO_WORLD_JSON_BYTES);
+         byte_count += writer_slice.len() as u64;
+         writer.clear();
+      }
+
+      print_output("simd_json to_writer", byte_count)
+   }
+
+   {
+      // simd_json_derive json_vec
+      
+      let mut byte_count = 0u64;
+      let start_time_nanos = get_epoch_nanos(&mut ts);
+
+      loop {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+            break;
+         }
+
+         let message = MessageSimdJsonDerive { message: "Hello World!" };
+         let out = simd_json_derive::Serialize::json_vec(&message).unwrap();
+         assert_eq!(out, HELLO_WORLD_JSON_BYTES);
+         let bytes_len = out.len();
+         byte_count += bytes_len as u64;
+      }
+
+      print_output("simd_json_derive json_vec", byte_count)
+   }
+
+   {
+      // simd_json_derive to_writer
+
+      let mut writer = Vec::with_capacity(26);
+      let mut byte_count = 0u64;
+      let start_time_nanos = get_epoch_nanos(&mut ts);
+
+      loop {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+            break;
+         }
+
+         let message = MessageSimdJsonDerive { message: "Hello World!" };
+         simd_json_derive::Serialize::json_write(&message, &mut writer).unwrap();
+         let writer_slice = writer.as_slice();
+         assert_eq!(writer_slice, HELLO_WORLD_JSON_BYTES);
+         byte_count += writer_slice.len() as u64;
+         writer.clear();
+      }
+
+      print_output("simd_json_derive to_writer", byte_count)
    }
 }
 
@@ -228,9 +323,19 @@ fn print_output(lib_name: &str, bytes_serialized: u64) {
       .collect::<Result<Vec<&str>, _>>()
       .unwrap()
       .join(",");
-   println!("{:<25} {} bytes/sec", lib_name, bytes_per_second);
+   println!("{:<26} {:>13} bytes/sec", lib_name, bytes_per_second);
 }
 
 fn print_version() {
    println!("{} v{} | repo: https://github.com/errantmind/faf-http-bench\n", statics::PROJECT_NAME, statics::VERSION,);
 }
+
+// impl<'a, B: &[u8]> std::io::Write for &[u8] {
+//    fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+//        self.put_slice(buf);
+//        Ok(buf.len())
+//    }
+//    fn flush(&mut self) -> io::Result<()> {
+//        Ok(())
+//    }
+// }

@@ -22,6 +22,8 @@ After that, just run it as usual with the optional flag to control duration per 
 - [serde_json](https://github.com/serde-rs/json)
 - [serde-json-core](https://github.com/rust-embedded-community/serde-json-core/)
 - [nanoserde](https://github.com/not-fl3/nanoserde)
+- [simd-json](https://github.com/simd-lite/simd-json)
+- [simd-json-derive](https://github.com/simd-lite/simd-json-derive)
 
 ## Methodology
 

@@ -47,11 +47,13 @@ once_cell = "*"
 
 #statrs = { version = "*", default-features = false }
 
-bytes = "*"
-
 serde = { version = "*", default-features = false, features = ["derive"] }
 serde_json = "*"
 
 serde-json-core = "*"
 
 nanoserde = "*"
+
+simd-json = "*"
+
+simd-json-derive = "*"
