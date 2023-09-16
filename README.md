@@ -17,15 +17,24 @@ After that, just run it as usual with the optional flag to control duration per 
 - While working on this, I routinely check it with `cargo run --release -- -d3`
 - When actually benchmarking, I set a higher priority and run the benchmark with `sudo nice -20 ./target/release/faf-json-bench -d15` after building it with `cargo build --release`
 
-## Libraries Tested:
+## Libraries Tested
 
 - [serde_json](https://github.com/serde-rs/json)
 - [serde-json-core](https://github.com/rust-embedded-community/serde-json-core/)
 - [nanoserde](https://github.com/not-fl3/nanoserde)
 
-## My Results
+## Methodology
 
-I always take precautions to ensure my benchmarking isn't adversely affected by other running programs by not having anything open/running, including most background services. There is very little noise.
+- Compiled with flags specified in `./cargo/config`, which include `"-Ctarget-cpu=native"`.
+- I always take precautions to ensure my benchmarking isn't adversely affected by other running programs by not having anything open/running, including most background services. There is very little noise.
+- To ensure results aren't optimized away, I always check the output after serializing / deserializing for correctness.
+- To ensure, loops aren't unpredictably vectorized, I check the time on each iteration instead of doing a fixed number of iterations. My time check uses VDSO on Linux which is very fast. I thought Rust's standard library also used VDSO on Linux but when I switched to my own implementation times improved by over 10%.
+
+System info for context
+
+![](ref/fetch.png)
+
+## Results
 
 ```
 serde_json to_vec         580,340,923 bytes/sec
@@ -35,10 +44,6 @@ serde_json_core to_slice  602,837,522 bytes/sec
 nanoserde serialize_json  248,805,747 bytes/sec
 nanoserde ser_json        439,978,413 bytes/sec
 ```
-
-System info for context:
-
-![](ref/fetch.png)
 
 ## Why Only Linux?
 
