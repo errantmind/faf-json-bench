@@ -43,12 +43,16 @@ System info for context
 ## Results
 
 ```
-serde_json to_vec         580,340,923 bytes/sec
-serde_json to_writer      517,163,471 bytes/sec
-serde_json_core to_vec    560,080,454 bytes/sec
-serde_json_core to_slice  602,837,522 bytes/sec
-nanoserde serialize_json  248,805,747 bytes/sec
-nanoserde ser_json        439,978,413 bytes/sec
+serde_json        to_vec               579,525,263 bytes/sec
+serde_json        to_writer            697,595,468 bytes/sec
+serde_json_core   to_vec               562,483,275 bytes/sec
+serde_json_core   to_slice             596,471,886 bytes/sec
+nanoserde         serialize_json       267,752,278 bytes/sec
+nanoserde         ser_json             473,381,752 bytes/sec
+simd_json         serde::to_vec        921,132,923 bytes/sec
+simd_json         serde::to_writer   1,172,034,126 bytes/sec
+simd_json_derive  json_vec             840,796,074 bytes/sec
+simd_json_derive  json_write         1,236,167,875 bytes/sec
 ```
 
 ## Why Only Linux?

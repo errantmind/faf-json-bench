@@ -98,7 +98,7 @@ fn main() {
          byte_count += bytes_len as u64;
       }
 
-      print_output("serde_json to_vec", byte_count)
+      print_output("serde_json", "to_vec", byte_count)
    }
 
    {
@@ -121,7 +121,7 @@ fn main() {
          writer.clear();
       }
 
-      print_output("serde_json to_writer", byte_count)
+      print_output("serde_json", "to_writer", byte_count)
    }
 
    {
@@ -141,7 +141,7 @@ fn main() {
          byte_count += out.len() as u64;
       }
 
-      print_output("serde_json_core to_vec", byte_count)
+      print_output("serde_json_core", "to_vec", byte_count)
    }
 
    {
@@ -167,7 +167,7 @@ fn main() {
          // Seems like a bug but it works.
       }
 
-      print_output("serde_json_core to_slice", byte_count)
+      print_output("serde_json_core", "to_slice", byte_count)
    }
 
    {
@@ -188,7 +188,7 @@ fn main() {
          byte_count += bytes_len as u64;
       }
 
-      print_output("nanoserde serialize_json", byte_count)
+      print_output("nanoserde", "serialize_json", byte_count)
    }
 
    {
@@ -211,12 +211,12 @@ fn main() {
          state.out.clear();
       }
 
-      print_output("nanoserde ser_json", byte_count)
+      print_output("nanoserde", "ser_json", byte_count)
    }
 
    {
       // simd_json serde::to_vec
-      
+
       let mut byte_count = 0u64;
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
@@ -232,11 +232,11 @@ fn main() {
          byte_count += bytes_len as u64;
       }
 
-      print_output("simd_json serde::to_vec", byte_count)
+      print_output("simd_json", "serde::to_vec", byte_count)
    }
 
    {
-      // simd_json to_writer
+      // simd_json serde::to_writer
 
       let mut writer = Vec::with_capacity(26);
       let mut byte_count = 0u64;
@@ -255,12 +255,12 @@ fn main() {
          writer.clear();
       }
 
-      print_output("simd_json to_writer", byte_count)
+      print_output("simd_json", "serde::to_writer", byte_count)
    }
 
    {
       // simd_json_derive json_vec
-      
+
       let mut byte_count = 0u64;
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
@@ -276,7 +276,7 @@ fn main() {
          byte_count += bytes_len as u64;
       }
 
-      print_output("simd_json_derive json_vec", byte_count)
+      print_output("simd_json_derive", "json_vec", byte_count)
    }
 
    {
@@ -299,7 +299,7 @@ fn main() {
          writer.clear();
       }
 
-      print_output("simd_json_derive json_write", byte_count)
+      print_output("simd_json_derive", "json_write", byte_count)
    }
 }
 
@@ -314,7 +314,7 @@ fn get_epoch_nanos(ts: &mut Timespec) -> u64 {
    ts.tv_sec as u64 * 1_000_000_000u64 + ts.tv_nsec as u64
 }
 
-fn print_output(lib_name: &str, bytes_serialized: u64) {
+fn print_output(lib_name: &str, test_name: &str, bytes_serialized: u64) {
    let bytes_per_second = format!("{:.0}", bytes_serialized as f64 / statics::ARGS.duration as f64)
       .as_bytes()
       .rchunks(3)
@@ -323,19 +323,9 @@ fn print_output(lib_name: &str, bytes_serialized: u64) {
       .collect::<Result<Vec<&str>, _>>()
       .unwrap()
       .join(",");
-   println!("{:<26} {:>13} bytes/sec", lib_name, bytes_per_second);
+   println!("{:<17} {:<17} {:>14} bytes/sec", lib_name, test_name, bytes_per_second);
 }
 
 fn print_version() {
    println!("{} v{} | repo: https://github.com/errantmind/faf-http-bench\n", statics::PROJECT_NAME, statics::VERSION,);
 }
-
-// impl<'a, B: &[u8]> std::io::Write for &[u8] {
-//    fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
-//        self.put_slice(buf);
-//        Ok(buf.len())
-//    }
-//    fn flush(&mut self) -> io::Result<()> {
-//        Ok(())
-//    }
-// }
