@@ -280,7 +280,7 @@ fn main() {
    }
 
    {
-      // simd_json_derive to_writer
+      // simd_json_derive json_write
 
       let mut writer = Vec::with_capacity(26);
       let mut byte_count = 0u64;
@@ -299,7 +299,7 @@ fn main() {
          writer.clear();
       }
 
-      print_output("simd_json_derive to_writer", byte_count)
+      print_output("simd_json_derive json_write", byte_count)
    }
 }
 
