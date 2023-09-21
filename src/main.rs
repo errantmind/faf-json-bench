@@ -87,7 +87,7 @@ fn main() {
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
-         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) >= duration_nanos {
             break;
          }
 
@@ -109,7 +109,7 @@ fn main() {
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
-         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) >= duration_nanos {
             break;
          }
 
@@ -131,7 +131,7 @@ fn main() {
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
-         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) >= duration_nanos {
             break;
          }
 
@@ -154,7 +154,7 @@ fn main() {
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
-         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) >= duration_nanos {
             break;
          }
 
@@ -177,7 +177,7 @@ fn main() {
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
-         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) >= duration_nanos {
             break;
          }
 
@@ -199,7 +199,7 @@ fn main() {
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
-         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) >= duration_nanos {
             break;
          }
 
@@ -221,7 +221,7 @@ fn main() {
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
-         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) >= duration_nanos {
             break;
          }
 
@@ -243,7 +243,7 @@ fn main() {
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
-         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) >= duration_nanos {
             break;
          }
 
@@ -265,7 +265,7 @@ fn main() {
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
-         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) >= duration_nanos {
             break;
          }
 
@@ -287,7 +287,7 @@ fn main() {
       let start_time_nanos = get_epoch_nanos(&mut ts);
 
       loop {
-         if (get_epoch_nanos(&mut ts) - start_time_nanos) > duration_nanos {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) >= duration_nanos {
             break;
          }
 
