@@ -25,6 +25,38 @@ After that, just run it as usual with the optional flag to control duration per 
 - [simd-json](https://github.com/simd-lite/simd-json)
 - [simd-json-derive](https://github.com/simd-lite/simd-json-derive)
 
+## Results
+
+### MiMalloc Allocator
+
+```
+serde_json        to_vec               579,525,263 bytes/sec
+serde_json        to_writer            697,595,468 bytes/sec
+serde_json_core   to_vec               562,483,275 bytes/sec
+serde_json_core   to_slice             596,471,886 bytes/sec
+nanoserde         serialize_json       267,752,278 bytes/sec
+nanoserde         ser_json             473,381,752 bytes/sec
+simd_json         serde::to_vec        921,132,923 bytes/sec
+simd_json         serde::to_writer   1,172,034,126 bytes/sec
+simd_json_derive  json_vec             840,796,074 bytes/sec
+simd_json_derive  json_write         1,236,167,875 bytes/sec
+```
+
+### SnMalloc Allocator
+
+```
+serde_json        to_vec               629,321,082 bytes/sec
+serde_json        to_writer            710,890,263 bytes/sec
+serde_json_core   to_vec               591,170,122 bytes/sec
+serde_json_core   to_slice             611,495,702 bytes/sec
+nanoserde         serialize_json       327,158,549 bytes/sec
+nanoserde         ser_json             473,248,539 bytes/sec
+simd_json         serde::to_vec      1,066,958,701 bytes/sec
+simd_json         serde::to_writer   1,140,126,189 bytes/sec
+simd_json_derive  json_vec             981,567,073 bytes/sec
+simd_json_derive  json_write         1,235,646,450 bytes/sec
+```
+
 ## Methodology
 
 - LLVM / Clang (v15)
@@ -40,27 +72,13 @@ System info for context
 
 ![](ref/fetch.png)
 
-## Results
-
-```
-serde_json        to_vec               579,525,263 bytes/sec
-serde_json        to_writer            697,595,468 bytes/sec
-serde_json_core   to_vec               562,483,275 bytes/sec
-serde_json_core   to_slice             596,471,886 bytes/sec
-nanoserde         serialize_json       267,752,278 bytes/sec
-nanoserde         ser_json             473,381,752 bytes/sec
-simd_json         serde::to_vec        921,132,923 bytes/sec
-simd_json         serde::to_writer   1,172,034,126 bytes/sec
-simd_json_derive  json_vec             840,796,074 bytes/sec
-simd_json_derive  json_write         1,236,167,875 bytes/sec
-```
-
 ## Why Only Linux?
 
 Unless there is some unexpected popular demand, I only want to support what I actually use and would prefer not to add the complexity to support other platforms. Also, I often use techniques for performance reasons that are Linux specific and getting similar results on other platforms may be complex.
 
 ## Observations:
 
+- Choice of allocator matters the most when using methods that allocate a buffer (.. yep)
 - For `serde_json_core to_vec`, checking the len with `assert!(bytes_len == 26);` after the serialization actually makes the operation faster, probably because it is a compiler hint
 - Cargo flags make a big difference for some frameworks like `serde_json_core`, which gained ~15% performance after adding flags to `[profile.release.package."*"]` and adding `rustflags` to `./cargo/config`. Only together does the gain appear...
 - Clang is faster than gcc for some tests but not others. For example, the `serde_json to_writer` is slightly faster with gcc but both `serde-json-core` tests are much faster with Clang

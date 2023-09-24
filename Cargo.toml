@@ -37,7 +37,9 @@ strip = 'symbols'
 
 [dependencies]
 # FFI bindings to better allocator designed by Microsoft
-mimalloc = { version = "*", default-features = false }
+#mimalloc = { version = "*", default-features = false }
+
+snmalloc-rs = "*"
 
 clap = { version = "*", default-features = true, features = ["derive"] }
 #regex = "*"

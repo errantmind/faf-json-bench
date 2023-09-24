@@ -22,8 +22,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 mod args;
 mod statics;
 
+// #[global_allocator]
+// static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+
 #[global_allocator]
-static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+static ALLOC: snmalloc_rs::SnMalloc = snmalloc_rs::SnMalloc;
 
 #[derive(serde::Serialize)]
 pub struct MessageSerdeJson {
@@ -42,18 +45,6 @@ pub struct MessageSimdJsonDerive {
    pub message: &'static str,
 }
 
-#[repr(C, align(64))]
-pub struct Timespec {
-   pub tv_sec: i64,
-   pub tv_nsec: i64,
-}
-
-extern "C" {
-   // We use this function instead of a direct syscall because this function uses VDSO, which is faster
-   fn clock_gettime(clk_id: i32, tp: *mut Timespec) -> i32;
-}
-
-const CLOCK_REALTIME: i32 = 0;
 const HELLO_WORLD_JSON_BYTES: [u8; 26] =
    [123, 34, 109, 101, 115, 115, 97, 103, 101, 34, 58, 34, 72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33, 34, 125];
 
@@ -303,6 +294,19 @@ fn main() {
    }
 }
 
+#[repr(C, align(64))]
+pub struct Timespec {
+   pub tv_sec: i64,
+   pub tv_nsec: i64,
+}
+
+extern "C" {
+   // We use this function instead of a direct syscall because this function uses VDSO, which is faster
+   fn clock_gettime(clk_id: i32, tp: *mut Timespec) -> i32;
+}
+
+const CLOCK_REALTIME: i32 = 0;
+
 // SAFETY:
 // current epoch time is 1694832834
 // 1694832834 * 1_000_000_000 = 1,694,832,834,000,000,000
@@ -327,5 +331,5 @@ fn print_output(lib_name: &str, test_name: &str, bytes_serialized: u64) {
 }
 
 fn print_version() {
-   println!("{} v{} | repo: https://github.com/errantmind/faf-http-bench\n", statics::PROJECT_NAME, statics::VERSION,);
+   println!("{} v{} | repo: https://github.com/errantmind/faf-json-bench\n", statics::PROJECT_NAME, statics::VERSION,);
 }
