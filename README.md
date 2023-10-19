@@ -24,8 +24,9 @@ After that, just run it as usual with the optional flag to control duration per 
 - [nanoserde](https://github.com/not-fl3/nanoserde)
 - [simd-json](https://github.com/simd-lite/simd-json)
 - [simd-json-derive](https://github.com/simd-lite/simd-json-derive)
+- [sonic-rs](https://github.com/cloudwego/sonic-rs)
 
-## Results
+## Results (small 26 byte serialization)
 
 ### MiMalloc Allocator
 
