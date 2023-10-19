@@ -60,3 +60,5 @@ simd-json = { version = "*", default-features = false }
 simd-json-derive = { version = "*", default-features = false}
 
 sonic-rs = "*"
+
+#sonic-rs = { git = "https://github.com/cloudwego/sonic-rs.git" }
