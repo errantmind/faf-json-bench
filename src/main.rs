@@ -263,7 +263,7 @@ fn main() {
          byte_count += bytes_len as u64;
       }
 
-      print_output("simd_json", "serde::to_vec", byte_count)
+      print_output("simd_json", "to_vec", byte_count)
    }
 
    {
@@ -286,7 +286,7 @@ fn main() {
          writer.clear();
       }
 
-      print_output("simd_json", "serde::to_writer", byte_count)
+      print_output("simd_json", "to_writer", byte_count)
    }
 
    {

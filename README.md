@@ -30,31 +30,35 @@ After that, just run it as usual with the optional flag to control duration per 
 ### MiMalloc Allocator
 
 ```
-serde_json        to_vec               579,525,263 bytes/sec
-serde_json        to_writer            697,595,468 bytes/sec
-serde_json_core   to_vec               562,483,275 bytes/sec
-serde_json_core   to_slice             596,471,886 bytes/sec
-nanoserde         serialize_json       267,752,278 bytes/sec
-nanoserde         ser_json             473,381,752 bytes/sec
-simd_json         serde::to_vec        921,132,923 bytes/sec
-simd_json         serde::to_writer   1,172,034,126 bytes/sec
-simd_json_derive  json_vec             840,796,074 bytes/sec
-simd_json_derive  json_write         1,236,167,875 bytes/sec
+sonic-rs          to_vec               702,717,584 bytes/sec
+sonic-rs          to_writer            900,952,293 bytes/sec
+serde_json        to_vec               582,281,081 bytes/sec
+serde_json        to_writer            708,082,121 bytes/sec
+serde_json_core   to_vec               577,153,469 bytes/sec
+serde_json_core   to_slice             613,309,651 bytes/sec
+nanoserde         serialize_json       256,818,914 bytes/sec
+nanoserde         ser_json             464,937,951 bytes/sec
+simd_json         serde::to_vec        939,485,893 bytes/sec
+simd_json         serde::to_writer   1,201,835,688 bytes/sec
+simd_json_derive  json_vec             862,631,744 bytes/sec
+simd_json_derive  json_write         1,286,133,949 bytes/sec
 ```
 
 ### SnMalloc Allocator
 
 ```
-serde_json        to_vec               629,321,082 bytes/sec
-serde_json        to_writer            710,890,263 bytes/sec
-serde_json_core   to_vec               591,170,122 bytes/sec
-serde_json_core   to_slice             611,495,702 bytes/sec
-nanoserde         serialize_json       327,158,549 bytes/sec
-nanoserde         ser_json             473,248,539 bytes/sec
-simd_json         serde::to_vec      1,066,958,701 bytes/sec
-simd_json         serde::to_writer   1,140,126,189 bytes/sec
-simd_json_derive  json_vec             981,567,073 bytes/sec
-simd_json_derive  json_write         1,235,646,450 bytes/sec
+sonic-rs          to_vec               774,810,906 bytes/sec
+sonic-rs          to_writer            920,956,549 bytes/sec
+serde_json        to_vec               648,675,050 bytes/sec
+serde_json        to_writer            716,364,451 bytes/sec
+serde_json_core   to_vec               575,182,795 bytes/sec
+serde_json_core   to_slice             618,356,154 bytes/sec
+nanoserde         serialize_json       332,858,131 bytes/sec
+nanoserde         ser_json             479,940,514 bytes/sec
+simd_json         serde::to_vec      1,128,408,596 bytes/sec
+simd_json         serde::to_writer   1,202,829,729 bytes/sec
+simd_json_derive  json_vec             996,038,397 bytes/sec
+simd_json_derive  json_write         1,281,402,158 bytes/sec
 ```
 
 ## Methodology
