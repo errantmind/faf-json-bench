@@ -1,6 +1,6 @@
 [package]
 name = "faf-json-bench"
-version = "0.1.0"
+version = "0.1.2"
 edition = "2021"
 
 [profile.dev]
@@ -58,3 +58,5 @@ nanoserde = { version = "*", default-features = false }
 simd-json = { version = "*", default-features = false }
 
 simd-json-derive = { version = "*", default-features = false}
+
+sonic-rs = "*"

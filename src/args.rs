@@ -27,26 +27,12 @@ pub struct Args {
    #[clap(default_value_t = false)]
    pub debug: bool,
 
-   /// the number of threads to use, defaults to the number of logical cores
-   #[clap(short, long)]
-   pub threads: Option<usize>,
-
    /// the duration of the test in seconds
    #[clap(short, long)]
    #[clap(default_value_t = 3)]
    pub duration: u64,
 
-   /// the name of the benchmark group. Used when saving the results to file
-   #[clap(short, long)]
-   #[clap(default_value = "untitled")]
-   pub bench: String,
-
-   /// clear the saved benchmark stats
-   #[clap(long)]
-   #[clap(default_value_t = false)]
-   pub clear: bool,
-
-   /// clear the saved benchmark stats
+   /// show 'about' info
    #[clap(short, long)]
    #[clap(default_value_t = false)]
    pub about: bool,

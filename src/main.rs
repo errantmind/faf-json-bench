@@ -45,6 +45,11 @@ pub struct MessageSimdJsonDerive {
    pub message: &'static str,
 }
 
+#[derive(sonic_rs::Serialize)]
+pub struct MessageSonicRs {
+   pub message: &'static str,
+}
+
 const HELLO_WORLD_JSON_BYTES: [u8; 26] =
    [123, 34, 109, 101, 115, 115, 97, 103, 101, 34, 58, 34, 72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33, 34, 125];
 
@@ -59,18 +64,53 @@ fn main() {
       }
    }
 
-   {
-      // Handle `clear` argument
-      if statics::ARGS.clear {
-         //json_stats::StatsSet::clear();
-         println!("Stats Cleared.");
-         return;
-      }
-   }
-
    let duration_nanos: u64 = statics::ARGS.duration * 1_000_000_000u64;
 
    let mut ts: Timespec = unsafe { core::mem::MaybeUninit::zeroed().assume_init() };
+
+   {
+      // sonic-rs to_vec
+
+      let mut byte_count = 0u64;
+      let start_time_nanos = get_epoch_nanos(&mut ts);
+
+      loop {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) >= duration_nanos {
+            break;
+         }
+
+         let message = MessageSonicRs { message: "Hello World!" };
+         let out = sonic_rs::to_vec(&message).unwrap();
+         assert_eq!(out.as_slice(), HELLO_WORLD_JSON_BYTES);
+         let bytes_len = out.len();
+         byte_count += bytes_len as u64;
+      }
+
+      print_output("sonic-rs", "to_vec", byte_count)
+   }
+
+   {
+      // sonic-rs to_writer
+
+      let mut writer = Vec::with_capacity(26);
+      let mut byte_count = 0u64;
+      let start_time_nanos = get_epoch_nanos(&mut ts);
+
+      loop {
+         if (get_epoch_nanos(&mut ts) - start_time_nanos) >= duration_nanos {
+            break;
+         }
+
+         let message = MessageSonicRs { message: "Hello World!" };
+         sonic_rs::to_writer(&mut writer, &message).unwrap();
+         let writer_slice = writer.as_slice();
+         assert_eq!(writer_slice, HELLO_WORLD_JSON_BYTES);
+         byte_count += writer_slice.len() as u64;
+         writer.clear();
+      }
+
+      print_output("sonic-rs", "to_writer", byte_count)
+   }
 
    {
       // serde_json to_vec
