@@ -3,7 +3,7 @@ rustflags = [
    "-Ctarget-cpu=native",
    "-Ztune-cpu=native",
    "-Zmutable-noalias=yes",
-   "-Clinker=/usr/bin/clang-15",
+   "-Clinker=/usr/bin/clang-16",
    "-Clink-arg=-fuse-ld=/usr/bin/ld.lld",
    "-Clink-arg=-flto=thin",
    #"-Clto=thin",

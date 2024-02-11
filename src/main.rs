@@ -23,7 +23,14 @@ mod args;
 mod statics;
 
 // #[global_allocator]
+// static GLOBAL: tcmalloc::TCMalloc = tcmalloc::TCMalloc;
+// const ALLOCATOR_NAME: &str = "TCMalloc";
+
+// #[global_allocator]
 // static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+
+// #[global_allocator]
+// static GLOBAL: mimalloc_rust::GlobalMiMalloc = mimalloc_rust::GlobalMiMalloc;
 
 #[global_allocator]
 static ALLOC: snmalloc_rs::SnMalloc = snmalloc_rs::SnMalloc;

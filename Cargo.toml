@@ -38,8 +38,10 @@ strip = 'symbols'
 [dependencies]
 # FFI bindings to better allocator designed by Microsoft
 #mimalloc = { version = "*", default-features = false }
-
+#mimalloc = { path = "/home/errant/dev/min/mimalloc_rust", version = "*", default-features = false } #, features = ["faf_debug"] }
+#tcmalloc = { version = "*", default-features = false, features = ["bundled"] }
 snmalloc-rs = "*"
+#mimalloc-rust = "*"
 
 clap = { version = "*", default-features = true, features = ["derive"] }
 #regex = "*"
