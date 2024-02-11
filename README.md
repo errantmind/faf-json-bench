@@ -10,12 +10,9 @@ I was looking for benchmarks and couldn't find any that included all the librari
 
 ## How to Use
 
-You must comment out incompatible RUSTFLAGS in `./cargo/config`. There will usually only be two ("-Clinker=/usr/bin/clang-15","-Clink-arg=-fuse-ld=/usr/bin/ld.lld"). These are so I can use clang / llvm when running the test but aren't necessary to see results on the benchmark.
+You must comment out incompatible RUSTFLAGS in `./cargo/config`. There will usually only be two ("-Clinker=/usr/bin/clang-16","-Clink-arg=-fuse-ld=/usr/bin/ld.lld"). These are so I can use clang / llvm when running the test but aren't necessary to see results on the benchmark.
 
-After that, just run it as usual with the optional flag to control duration per test. Here are some :
-
-- While working on this, I routinely check it with `cargo run --release -- -d3`
-- When actually benchmarking, I set a higher priority and run the benchmark with `sudo nice -20 ./target/release/faf-json-bench -d15` after building it with `cargo build --release`
+After that, if using clang, run it with `./clang_build_and_run.sh`, otherwise run it with `cargo build --release && sudo nice -20 ./target/release/faf-json-bench`
 
 ## Libraries Tested
 
@@ -98,7 +95,7 @@ simd_json_derive  json_write         1,335,253,937 bytes/sec
 
 ## Methodology
 
-- LLVM / Clang (v15)
+- LLVM / Clang (v16)
 - MiMalloc Allocator
 - Elevated priority
 - Minimized system-wide noise. I always take precautions to ensure my benchmarking isn't adversely affected by other running programs by not having anything open/running, including most background services
@@ -119,7 +116,6 @@ Unless there is some unexpected popular demand, I only want to support what I ac
 
 - Choice of allocator matters the most when using methods that allocate a buffer (.. yep)
 - For `serde_json_core to_vec`, checking the len with `assert!(bytes_len == 26);` after the serialization actually makes the operation faster, probably because it is a compiler hint
-- Cargo flags make a big difference for some frameworks like `serde_json_core`, which gained ~15% performance after adding flags to `[profile.release.package."*"]` and adding `rustflags` to `./cargo/config`. Only together does the gain appear...
 - Clang is faster than gcc for some tests but not others. For example, the `serde_json to_writer` is slightly faster with gcc but both `serde-json-core` tests are much faster with Clang
 
 ## Contributions
